@@ -113,44 +113,6 @@ const blogPosts = [
 
       <p><em>Ready to start your Indic language journey? Join our waitlist today!</em></p>
     `
-  },
-  {
-    id: 2,
-    title: "The Science Behind Effective Language Learning",
-    date: "2025-09-03",
-    excerpt: "Discover the research-backed methods that power Bhol's learning approach, from spaced repetition to contextual immersion techniques.",
-    readTime: "5 min read",
-    fullContent: `
-      <h2>Evidence-Based Language Learning</h2>
-      <p>At Bhol, we don't just create another language app – we build on decades of linguistic research and cognitive science to deliver the most effective learning experience possible.</p>
-
-      <h3>Spaced Repetition: The Memory Hack</h3>
-      <p>Our AI system uses spaced repetition algorithms proven to improve retention by up to 200%. Instead of cramming vocabulary, we strategically review material at optimal intervals:</p>
-      <ul>
-        <li>New words: Reviewed after 1 day, then 3 days, then 1 week</li>
-        <li>Mastered concepts: Reviewed monthly to prevent forgetting</li>
-        <li>Problem areas: Extra focus with shorter intervals</li>
-      </ul>
-
-      <h3>Contextual Learning</h3>
-      <p>Research shows that learning vocabulary in context leads to 3x better retention than isolated memorization. That's why every Bhol lesson is built around:</p>
-      <ul>
-        <li>Authentic conversations and dialogues</li>
-        <li>Cultural stories and scenarios</li>
-        <li>Real-world applications and use cases</li>
-      </ul>
-
-      <h3>Active Recall & Testing</h3>
-      <p>Instead of passive reading, Bhol emphasizes active recall – the most effective learning technique identified by cognitive scientists. Our system:</p>
-      <ul>
-        <li>Tests you before showing answers</li>
-        <li>Uses multiple choice, fill-in-the-blank, and speaking exercises</li>
-        <li>Adapts difficulty based on your performance</li>
-      </ul>
-
-      <h3>The Results</h3>
-      <p>Beta testers using our methods report 2-3x faster progress compared to traditional language courses. Whether you're learning Hindi for business, Bengali for cultural connection, or Tamil for family heritage, Bhol's science-backed approach gets you speaking confidently faster than ever before.</p>
-    `
   }
 ];
 
