@@ -32,7 +32,7 @@ const styles = {
     fontWeight: 'bold',
     color: '#333',
     marginBottom: '1.5rem',
-    borderBottom: '2px solid #FF6B35',
+    borderBottom: '2px solid #FF522B',
     paddingBottom: '0.5rem'
   },
   faqItem: {
@@ -73,7 +73,7 @@ const styles = {
     marginBottom: '1rem'
   },
   button: {
-    backgroundColor: '#FF6B35',
+    background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -82,7 +82,7 @@ const styles = {
     cursor: 'pointer',
     textDecoration: 'none',
     display: 'inline-block',
-    transition: 'background-color 0.2s'
+    transition: 'opacity 0.2s'
   }
 };
 

@@ -49,12 +49,12 @@ const styles = {
     marginBottom: '1rem'
   },
   readMore: {
-    color: '#FF6B35',
+    color: '#FF522B',
     textDecoration: 'none',
     fontWeight: 'bold'
   },
   backButton: {
-    backgroundColor: '#FF6B35',
+    background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     border: 'none',
     padding: '10px 20px',

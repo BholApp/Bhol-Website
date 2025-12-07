@@ -15,7 +15,7 @@ const styles = {
     backgroundColor: '#fff'
   },
   header: {
-    backgroundColor: '#FF6B35',
+    background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     padding: '1rem 0',
     position: 'sticky',
@@ -73,7 +73,7 @@ const styles = {
     marginBottom: '2rem'
   },
   button: {
-    backgroundColor: '#FF6B35',
+    background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -82,7 +82,7 @@ const styles = {
     cursor: 'pointer',
     textDecoration: 'none',
     display: 'inline-block',
-    transition: 'background-color 0.2s'
+    transition: 'opacity 0.2s'
   },
   grid: {
     display: 'grid',
@@ -118,7 +118,7 @@ const styles = {
     fontSize: '1.2rem',
     fontWeight: 'bold',
     marginBottom: '1rem',
-    color: '#FF6B35'
+    color: '#FF522B'
   },
   footerLink: {
     color: 'white',
@@ -318,19 +318,19 @@ function AboutPage() {
           </p>
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem'}}>
             <div style={{padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-              <h4 style={{color: '#FF6B35', marginBottom: '0.5rem'}}>AI-Powered Learning</h4>
+              <h4 style={{color: '#FF522B', marginBottom: '0.5rem'}}>AI-Powered Learning</h4>
               <p>Personalized lesson recommendations and intelligent review scheduling.</p>
             </div>
             <div style={{padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-              <h4 style={{color: '#FF6B35', marginBottom: '0.5rem'}}>Cultural Immersion</h4>
+              <h4 style={{color: '#FF522B', marginBottom: '0.5rem'}}>Cultural Immersion</h4>
               <p>Contextual learning through stories, music, and cultural content.</p>
             </div>
             <div style={{padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-              <h4 style={{color: '#FF6B35', marginBottom: '0.5rem'}}>Community Support</h4>
+              <h4 style={{color: '#FF522B', marginBottom: '0.5rem'}}>Community Support</h4>
               <p>Connect with fellow learners and native speakers for practice.</p>
             </div>
             <div style={{padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-              <h4 style={{color: '#FF6B35', marginBottom: '0.5rem'}}>Expert Validation</h4>
+              <h4 style={{color: '#FF522B', marginBottom: '0.5rem'}}>Expert Validation</h4>
               <p>Content reviewed by linguists and native speakers for accuracy.</p>
             </div>
           </div>
@@ -382,7 +382,7 @@ function CareersPage() {
         </div>
         
         <p style={{textAlign: 'center', marginTop: '2rem', fontSize: '1.1rem'}}>
-          Reach out to us on <a href="https://twitter.com/bholapp_" target="_blank" rel="noopener noreferrer" style={{color: '#FF6B35', fontWeight: 'bold', textDecoration: 'none'}}>X</a>
+          Reach out to us on <a href="https://twitter.com/bholapp_" target="_blank" rel="noopener noreferrer" style={{color: '#FF522B', fontWeight: 'bold', textDecoration: 'none'}}>X</a>
         </p>
       </div>
     </div>
