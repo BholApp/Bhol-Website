@@ -3,85 +3,108 @@ import React, { useState } from 'react';
 const styles = {
   hero: {
     textAlign: 'center',
-    padding: '4rem 1rem',
+    padding: '5rem 2rem',
     backgroundColor: '#FFF5F2',
-    borderRadius: '12px',
-    margin: '2rem 0'
+    borderRadius: '16px',
+    margin: '3rem 0'
   },
   heroTitle: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '3.5rem',
+    fontWeight: '800',
+    color: '#222',
+    marginBottom: '1.5rem',
+    lineHeight: 1.2,
+    letterSpacing: '-0.02em'
   },
   heroSubtitle: {
-    fontSize: '1.2rem',
-    color: '#666',
-    marginBottom: '2rem'
+    fontSize: '1.35rem',
+    color: '#555',
+    marginBottom: '2.5rem',
+    lineHeight: 1.6,
+    maxWidth: '700px',
+    margin: '0 auto'
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-    gap: '2rem',
-    margin: '3rem 0'
+    gap: '2.5rem',
+    margin: '4rem 0'
   },
   card: {
-    padding: '2rem',
+    padding: '2.5rem',
     backgroundColor: '#FFF',
-    borderRadius: '12px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    border: '1px solid #e0e0e0'
+    borderRadius: '16px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+    border: '1px solid #e0e0e0',
+    transition: 'transform 0.3s, box-shadow 0.3s',
+    cursor: 'pointer'
+  },
+  cardHover: {
+    transform: 'translateY(-8px)',
+    boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
   },
   postTitle: {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '1.75rem',
+    fontWeight: '700',
+    color: '#222',
+    marginBottom: '1rem',
+    lineHeight: 1.3
   },
   postMeta: {
-    fontSize: '0.9rem',
-    color: '#666',
-    marginBottom: '1rem'
+    fontSize: '0.95rem',
+    color: '#777',
+    marginBottom: '1.2rem'
   },
   postExcerpt: {
     color: '#555',
-    lineHeight: '1.6',
-    marginBottom: '1rem'
+    lineHeight: 1.7,
+    marginBottom: '1.5rem',
+    fontSize: '1.05rem'
   },
   readMore: {
-    color: '#FF6B35',
+    color: '#FF522B',
     textDecoration: 'none',
     fontWeight: 'bold'
   },
   backButton: {
-    backgroundColor: '#FF6B35',
+    background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     border: 'none',
-    padding: '10px 20px',
-    borderRadius: '6px',
+    padding: '12px 24px',
+    borderRadius: '8px',
     cursor: 'pointer',
     fontSize: '1rem',
-    marginBottom: '2rem'
+    fontWeight: '600',
+    marginBottom: '2.5rem',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    boxShadow: '0 4px 12px rgba(255, 82, 43, 0.3)'
+  },
+  backButtonHover: {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 20px rgba(255, 82, 43, 0.4)'
   },
   fullPost: {
     maxWidth: '800px',
     margin: '0 auto',
-    lineHeight: '1.8'
+    lineHeight: 1.8
   },
   fullPostTitle: {
-    fontSize: '2.5rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '3rem',
+    fontWeight: '800',
+    color: '#222',
+    marginBottom: '1.5rem',
+    lineHeight: 1.2,
+    letterSpacing: '-0.02em'
   },
   fullPostMeta: {
-    color: '#666',
-    marginBottom: '2rem',
+    color: '#777',
+    marginBottom: '3rem',
     fontSize: '1.1rem'
   },
   fullPostContent: {
-    color: '#333',
-    fontSize: '1.1rem'
+    color: '#444',
+    fontSize: '1.15rem',
+    lineHeight: 1.8
   }
 };
 
@@ -113,49 +136,13 @@ const blogPosts = [
 
       <p><em>Ready to start your Indic language journey? Join our waitlist today!</em></p>
     `
-  },
-  {
-    id: 2,
-    title: "The Science Behind Effective Language Learning",
-    date: "2025-09-03",
-    excerpt: "Discover the research-backed methods that power Bhol's learning approach, from spaced repetition to contextual immersion techniques.",
-    readTime: "5 min read",
-    fullContent: `
-      <h2>Evidence-Based Language Learning</h2>
-      <p>At Bhol, we don't just create another language app – we build on decades of linguistic research and cognitive science to deliver the most effective learning experience possible.</p>
-
-      <h3>Spaced Repetition: The Memory Hack</h3>
-      <p>Our AI system uses spaced repetition algorithms proven to improve retention by up to 200%. Instead of cramming vocabulary, we strategically review material at optimal intervals:</p>
-      <ul>
-        <li>New words: Reviewed after 1 day, then 3 days, then 1 week</li>
-        <li>Mastered concepts: Reviewed monthly to prevent forgetting</li>
-        <li>Problem areas: Extra focus with shorter intervals</li>
-      </ul>
-
-      <h3>Contextual Learning</h3>
-      <p>Research shows that learning vocabulary in context leads to 3x better retention than isolated memorization. That's why every Bhol lesson is built around:</p>
-      <ul>
-        <li>Authentic conversations and dialogues</li>
-        <li>Cultural stories and scenarios</li>
-        <li>Real-world applications and use cases</li>
-      </ul>
-
-      <h3>Active Recall & Testing</h3>
-      <p>Instead of passive reading, Bhol emphasizes active recall – the most effective learning technique identified by cognitive scientists. Our system:</p>
-      <ul>
-        <li>Tests you before showing answers</li>
-        <li>Uses multiple choice, fill-in-the-blank, and speaking exercises</li>
-        <li>Adapts difficulty based on your performance</li>
-      </ul>
-
-      <h3>The Results</h3>
-      <p>Beta testers using our methods report 2-3x faster progress compared to traditional language courses. Whether you're learning Hindi for business, Bengali for cultural connection, or Tamil for family heritage, Bhol's science-backed approach gets you speaking confidently faster than ever before.</p>
-    `
   }
 ];
 
 function Blog() {
   const [selectedPost, setSelectedPost] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredButton, setHoveredButton] = useState(false);
 
   const handleReadMore = (post) => {
     setSelectedPost(post);
@@ -174,7 +161,15 @@ function Blog() {
         </div>
 
         <div style={styles.fullPost}>
-          <button style={styles.backButton} onClick={handleBackToBlog}>
+          <button
+            style={{
+              ...styles.backButton,
+              ...(hoveredButton ? styles.backButtonHover : {})
+            }}
+            onClick={handleBackToBlog}
+            onMouseEnter={() => setHoveredButton(true)}
+            onMouseLeave={() => setHoveredButton(false)}
+          >
             ← Back to Blog
           </button>
 
@@ -199,15 +194,23 @@ function Blog() {
       </div>
 
       <div style={styles.grid}>
-        {blogPosts.map(post => (
-          <div key={post.id} style={styles.card}>
+        {blogPosts.map((post, index) => (
+          <div
+            key={post.id}
+            style={{
+              ...styles.card,
+              ...(hoveredCard === index ? styles.cardHover : {})
+            }}
+            onMouseEnter={() => setHoveredCard(index)}
+            onMouseLeave={() => setHoveredCard(null)}
+          >
             <h2 style={styles.postTitle}>{post.title}</h2>
             <div style={styles.postMeta}>
               {post.date} • {post.readTime}
             </div>
             <p style={styles.postExcerpt}>{post.excerpt}</p>
             <button
-              style={{...styles.readMore, background: 'none', border: 'none', cursor: 'pointer'}}
+              style={{...styles.readMore, background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.05rem'}}
               onClick={() => handleReadMore(post)}
             >
               Read More →
