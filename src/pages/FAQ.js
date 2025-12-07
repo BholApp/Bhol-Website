@@ -1,92 +1,110 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const styles = {
   hero: {
     textAlign: 'center',
-    padding: '4rem 1rem',
+    padding: '5rem 2rem',
     backgroundColor: '#FFF5F2',
-    borderRadius: '12px',
-    margin: '2rem 0'
+    borderRadius: '16px',
+    margin: '3rem 0'
   },
   heroTitle: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '3.5rem',
+    fontWeight: '800',
+    color: '#222',
+    marginBottom: '1.5rem',
+    lineHeight: 1.2,
+    letterSpacing: '-0.02em'
   },
   heroSubtitle: {
-    fontSize: '1.2rem',
-    color: '#666',
-    marginBottom: '2rem'
+    fontSize: '1.35rem',
+    color: '#555',
+    marginBottom: '2.5rem',
+    lineHeight: 1.6,
+    maxWidth: '750px',
+    margin: '0 auto'
   },
   content: {
     maxWidth: '900px',
     margin: '0 auto',
-    lineHeight: '1.6'
+    lineHeight: 1.8
   },
   faqSection: {
-    marginBottom: '3rem'
+    marginBottom: '4rem'
   },
   sectionTitle: {
-    fontSize: '1.8rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1.5rem',
-    borderBottom: '2px solid #FF522B',
-    paddingBottom: '0.5rem'
+    fontSize: '2.2rem',
+    fontWeight: '700',
+    color: '#222',
+    marginBottom: '2rem',
+    borderBottom: '3px solid #FF522B',
+    paddingBottom: '0.75rem',
+    letterSpacing: '-0.01em'
   },
   faqItem: {
-    marginBottom: '2rem',
+    marginBottom: '1.5rem',
     backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    overflow: 'hidden'
+    borderRadius: '12px',
+    boxShadow: '0 3px 10px rgba(0,0,0,0.08)',
+    overflow: 'hidden',
+    border: '1px solid #f0f0f0'
   },
   question: {
     backgroundColor: '#f8f9fa',
-    padding: '1.5rem',
+    padding: '1.75rem',
     margin: 0,
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: '1.15rem',
+    fontWeight: '600',
+    color: '#222',
     cursor: 'pointer',
     border: 'none',
     width: '100%',
     textAlign: 'left',
-    transition: 'background-color 0.2s'
+    transition: 'background-color 0.2s',
+    lineHeight: 1.5
   },
   answer: {
-    padding: '0 1.5rem 1.5rem',
+    padding: '0 1.75rem 1.75rem',
     color: '#555',
-    lineHeight: '1.6'
+    lineHeight: 1.8,
+    fontSize: '1.05rem'
   },
   contactSection: {
-    backgroundColor: '#f8f9fa',
-    padding: '3rem',
-    borderRadius: '12px',
+    backgroundColor: '#FFF5F2',
+    padding: '4rem 2rem',
+    borderRadius: '16px',
     textAlign: 'center',
-    marginTop: '3rem'
+    marginTop: '4rem'
   },
   contactTitle: {
-    fontSize: '1.5rem',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '2rem',
+    color: '#222',
+    marginBottom: '1.5rem',
+    fontWeight: '700'
   },
   button: {
     background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     border: 'none',
-    padding: '12px 24px',
-    fontSize: '1rem',
-    borderRadius: '6px',
+    padding: '14px 32px',
+    fontSize: '1.05rem',
+    fontWeight: '600',
+    borderRadius: '8px',
     cursor: 'pointer',
     textDecoration: 'none',
     display: 'inline-block',
-    transition: 'opacity 0.2s'
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    boxShadow: '0 4px 12px rgba(255, 82, 43, 0.3)'
+  },
+  buttonHover: {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 20px rgba(255, 82, 43, 0.4)'
   }
 };
 
 function FAQ() {
+  const [hoveredButton, setHoveredButton] = useState(false);
+
   const faqData = [
     {
       category: "About Bhol",
@@ -201,10 +219,20 @@ function FAQ() {
 
         <div style={styles.contactSection}>
           <h2 style={styles.contactTitle}>Still have questions?</h2>
-          <p style={{marginBottom: '2rem', color: '#666'}}>
+          <p style={{marginBottom: '2.5rem', color: '#555', fontSize: '1.15rem', lineHeight: 1.6}}>
             Can't find the answer you're looking for? We'd love to hear from you!
           </p>
-          <a href="mailto:hello@bhol.app" style={styles.button}>Contact Us</a>
+          <a
+            href="mailto:hello@bhol.app"
+            style={{
+              ...styles.button,
+              ...(hoveredButton ? styles.buttonHover : {})
+            }}
+            onMouseEnter={() => setHoveredButton(true)}
+            onMouseLeave={() => setHoveredButton(false)}
+          >
+            Contact Us
+          </a>
         </div>
       </div>
     </div>

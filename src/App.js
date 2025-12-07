@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Blog from './pages/Blog';
 import FAQ from './pages/FAQ';
@@ -12,7 +12,8 @@ const styles = {
     margin: 0,
     padding: 0,
     minHeight: '100vh',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    lineHeight: 1.7
   },
   header: {
     background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
@@ -20,7 +21,8 @@ const styles = {
     padding: '1rem 0',
     position: 'sticky',
     top: 0,
-    zIndex: 1000
+    zIndex: 1000,
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
   },
   nav: {
     maxWidth: '1200px',
@@ -28,74 +30,138 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 1rem'
+    padding: '0 1.5rem',
+    position: 'relative'
   },
   logo: {
-    fontSize: '1.5rem',
+    fontSize: '2rem',
     fontWeight: 'bold',
     textDecoration: 'none',
-    color: 'white'
+    color: 'white',
+    zIndex: 1001
+  },
+  hamburger: {
+    display: 'none',
+    flexDirection: 'column',
+    cursor: 'pointer',
+    zIndex: 1001,
+    gap: '4px'
+  },
+  hamburgerLine: {
+    width: '25px',
+    height: '3px',
+    backgroundColor: 'white',
+    transition: 'all 0.3s ease',
+    borderRadius: '2px'
   },
   navLinks: {
     display: 'flex',
+    gap: '2.5rem',
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+    alignItems: 'center'
+  },
+  navLinksOpen: {
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    height: '100vh',
+    width: '70%',
+    maxWidth: '300px',
+    background: 'linear-gradient(180deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
+    padding: '5rem 2rem 2rem',
     gap: '2rem',
     listStyle: 'none',
     margin: 0,
-    padding: 0
+    boxShadow: '-2px 0 10px rgba(0,0,0,0.2)',
+    transition: 'transform 0.3s ease',
+    zIndex: 1000
   },
   navLink: {
     color: 'white',
     textDecoration: 'none',
-    fontSize: '1rem',
-    transition: 'opacity 0.2s'
+    fontSize: '1.05rem',
+    transition: 'opacity 0.2s',
+    fontWeight: '500',
+    cursor: 'pointer'
+  },
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 999,
+    transition: 'opacity 0.3s ease'
   },
   main: {
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '2rem 1rem'
+    padding: '3rem 1.5rem'
   },
   hero: {
     textAlign: 'center',
-    padding: '4rem 1rem',
+    padding: '5rem 2rem',
     backgroundColor: '#FFF5F2',
-    borderRadius: '12px',
-    margin: '2rem 0'
+    borderRadius: '16px',
+    margin: '3rem 0'
   },
   heroTitle: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '3.5rem',
+    fontWeight: '800',
+    color: '#222',
+    marginBottom: '1.5rem',
+    lineHeight: 1.2,
+    letterSpacing: '-0.02em'
   },
   heroSubtitle: {
-    fontSize: '1.2rem',
-    color: '#666',
-    marginBottom: '2rem'
+    fontSize: '1.35rem',
+    color: '#555',
+    marginBottom: '2.5rem',
+    lineHeight: 1.6,
+    maxWidth: '700px',
+    margin: '0 auto 2.5rem'
   },
   button: {
     background: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
     color: 'white',
     border: 'none',
-    padding: '12px 24px',
-    fontSize: '1rem',
-    borderRadius: '6px',
+    padding: '14px 32px',
+    fontSize: '1.05rem',
+    fontWeight: '600',
+    borderRadius: '8px',
     cursor: 'pointer',
     textDecoration: 'none',
     display: 'inline-block',
-    transition: 'opacity 0.2s'
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    boxShadow: '0 4px 12px rgba(255, 82, 43, 0.3)'
+  },
+  buttonHover: {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 20px rgba(255, 82, 43, 0.4)'
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '2rem',
-    margin: '3rem 0'
+    gap: '2.5rem',
+    margin: '4rem 0'
   },
   card: {
-    padding: '2rem',
+    padding: '2.5rem',
     backgroundColor: '#FFF',
-    borderRadius: '12px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    textAlign: 'center'
+    borderRadius: '16px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+    textAlign: 'center',
+    transition: 'transform 0.3s, box-shadow 0.3s',
+    cursor: 'pointer'
+  },
+  cardHover: {
+    transform: 'translateY(-8px)',
+    boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
   },
   footer: {
     backgroundColor: '#333',
@@ -148,20 +214,73 @@ const styles = {
 
 // Components
 function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  // Media query handling
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <header style={styles.header}>
       <nav style={styles.nav}>
-        <Link to="/" style={styles.logo}>Bhol</Link>
-        <ul style={styles.navLinks}>
-          <li><Link to="/" style={styles.navLink}>Home</Link></li>
-          <li><Link to="/about" style={styles.navLink}>About</Link></li>
-          <li><Link to="/blog" style={styles.navLink}>Blog</Link></li>
-          <li><Link to="/faq" style={styles.navLink}>FAQ</Link></li>
-          <li><Link to="/careers" style={styles.navLink}>Careers</Link></li>
-          <li><Link to="/privacy" style={styles.navLink}>Privacy</Link></li>
-          <li><Link to="/terms" style={styles.navLink}>Terms</Link></li>
+        <Link to="/" style={styles.logo} onClick={closeMobileMenu}>Bhol</Link>
+
+        {/* Hamburger Menu */}
+        <div
+          style={{
+            ...styles.hamburger,
+            display: isMobile ? 'flex' : 'none'
+          }}
+          onClick={toggleMobileMenu}
+        >
+          <div style={{
+            ...styles.hamburgerLine,
+            transform: mobileMenuOpen ? 'rotate(45deg) translate(6px, 6px)' : 'none'
+          }} />
+          <div style={{
+            ...styles.hamburgerLine,
+            opacity: mobileMenuOpen ? 0 : 1
+          }} />
+          <div style={{
+            ...styles.hamburgerLine,
+            transform: mobileMenuOpen ? 'rotate(-45deg) translate(6px, -6px)' : 'none'
+          }} />
+        </div>
+
+        {/* Desktop & Mobile Nav */}
+        <ul style={isMobile ? (mobileMenuOpen ? styles.navLinksOpen : {display: 'none'}) : styles.navLinks}>
+          <li><Link to="/" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Home</Link></li>
+          <li><Link to="/about" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>About</Link></li>
+          <li><Link to="/blog" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Blog</Link></li>
+          <li><Link to="/faq" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>FAQ</Link></li>
+          <li><Link to="/careers" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Careers</Link></li>
+          <li><Link to="/privacy" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Privacy</Link></li>
+          <li><Link to="/terms" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Terms</Link></li>
         </ul>
       </nav>
+
+      {/* Overlay */}
+      {mobileMenuOpen && isMobile && (
+        <div style={styles.overlay} onClick={closeMobileMenu} />
+      )}
     </header>
   );
 }
@@ -221,26 +340,60 @@ function Footer() {
 }
 
 function HomePage() {
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredButton, setHoveredButton] = useState(false);
+
   return (
     <div>
       <div style={styles.hero}>
         <h1 style={styles.heroTitle}>Learn Indic Languages</h1>
         <p style={styles.heroSubtitle}>Master Hindi, Bengali, Tamil, and more with interactive lessons and AI-powered practice.</p>
-        <a href="#features" style={styles.button}>Start Learning</a>
+        <a
+          href="#features"
+          style={{
+            ...styles.button,
+            ...(hoveredButton ? styles.buttonHover : {})
+          }}
+          onMouseEnter={() => setHoveredButton(true)}
+          onMouseLeave={() => setHoveredButton(false)}
+        >
+          Start Learning
+        </a>
       </div>
-      
+
       <div style={styles.grid} id="features">
-        <div style={styles.card}>
-          <h3>🎯 Interactive Flashcards</h3>
-          <p>Master vocabulary with spaced repetition and smart review algorithms.</p>
+        <div
+          style={{
+            ...styles.card,
+            ...(hoveredCard === 0 ? styles.cardHover : {})
+          }}
+          onMouseEnter={() => setHoveredCard(0)}
+          onMouseLeave={() => setHoveredCard(null)}
+        >
+          <h3 style={{fontSize: '1.5rem', marginBottom: '1rem', color: '#222'}}>🎯 Interactive Flashcards</h3>
+          <p style={{color: '#666', lineHeight: 1.7}}>Master vocabulary with spaced repetition and smart review algorithms.</p>
         </div>
-        <div style={styles.card}>
-          <h3>📚 Story-Based Learning</h3>
-          <p>Learn through engaging stories that adapt to your skill level.</p>
+        <div
+          style={{
+            ...styles.card,
+            ...(hoveredCard === 1 ? styles.cardHover : {})
+          }}
+          onMouseEnter={() => setHoveredCard(1)}
+          onMouseLeave={() => setHoveredCard(null)}
+        >
+          <h3 style={{fontSize: '1.5rem', marginBottom: '1rem', color: '#222'}}>📚 Story-Based Learning</h3>
+          <p style={{color: '#666', lineHeight: 1.7}}>Learn through engaging stories that adapt to your skill level.</p>
         </div>
-        <div style={styles.card}>
-          <h3>🏆 Gamification</h3>
-          <p>Track your progress with XP points, streaks, and achievements.</p>
+        <div
+          style={{
+            ...styles.card,
+            ...(hoveredCard === 2 ? styles.cardHover : {})
+          }}
+          onMouseEnter={() => setHoveredCard(2)}
+          onMouseLeave={() => setHoveredCard(null)}
+        >
+          <h3 style={{fontSize: '1.5rem', marginBottom: '1rem', color: '#222'}}>🏆 Gamification</h3>
+          <p style={{color: '#666', lineHeight: 1.7}}>Track your progress with XP points, streaks, and achievements.</p>
         </div>
       </div>
     </div>
@@ -248,6 +401,8 @@ function HomePage() {
 }
 
 function AboutPage() {
+  const [hoveredButton, setHoveredButton] = useState(false);
+
   return (
     <div>
       <div style={styles.hero}>
@@ -255,24 +410,24 @@ function AboutPage() {
         <p style={styles.heroSubtitle}>Bridging cultures through language learning</p>
       </div>
 
-      <div style={{maxWidth: '900px', margin: '0 auto', lineHeight: '1.6'}}>
-        <section style={{marginBottom: '3rem'}}>
-          <h2 style={{fontSize: '2rem', color: '#333', marginBottom: '1rem'}}>Our Story</h2>
-          <p style={{fontSize: '1.1rem', marginBottom: '1.5rem'}}>
+      <div style={{maxWidth: '900px', margin: '0 auto', lineHeight: 1.8}}>
+        <section style={{marginBottom: '5rem'}}>
+          <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em'}}>Our Story</h2>
+          <p style={{fontSize: '1.2rem', marginBottom: '1.5rem', color: '#444', lineHeight: 1.8}}>
             Bhol was born from a simple observation: while the world becomes increasingly connected, language barriers continue to divide us.
             Our founders, having experienced the challenges of learning Indic languages firsthand, recognized that traditional language learning
             methods were not keeping pace with modern technology or the diverse needs of today's learners.
           </p>
-          <p>
+          <p style={{fontSize: '1.1rem', color: '#555', lineHeight: 1.8}}>
             What started as a personal project to help friends and family learn Hindi has evolved into a mission to democratize
             access to Indic language education. We believe that everyone should have the opportunity to connect with the rich
             cultural heritage of India, Pakistan, Bangladesh, and Nepal through their languages.
           </p>
         </section>
 
-        <section style={{marginBottom: '3rem'}}>
-          <h2 style={{fontSize: '2rem', color: '#333', marginBottom: '1rem'}}>Our Mission</h2>
-          <p style={{fontSize: '1.1rem', marginBottom: '1.5rem'}}>
+        <section style={{marginBottom: '5rem'}}>
+          <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em'}}>Our Mission</h2>
+          <p style={{fontSize: '1.2rem', marginBottom: '2rem', color: '#444', lineHeight: 1.8}}>
             To make Indic languages accessible, engaging, and culturally rich for learners worldwide. We envision a world where
             language barriers don't limit cultural exchange, business opportunities, or personal connections.
           </p>
@@ -292,28 +447,28 @@ function AboutPage() {
           </div>
         </section>
 
-        <section style={{marginBottom: '3rem'}}>
-          <h2 style={{fontSize: '2rem', color: '#333', marginBottom: '1rem'}}>Why Indic Languages Matter</h2>
-          <p style={{fontSize: '1.1rem', marginBottom: '1.5rem'}}>
+        <section style={{marginBottom: '5rem'}}>
+          <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em'}}>Why Indic Languages Matter</h2>
+          <p style={{fontSize: '1.2rem', marginBottom: '1.5rem', color: '#444', lineHeight: 1.8}}>
             Indic languages represent one of the world's largest and most diverse language families, spoken by over 1.5 billion people
             across South Asia and the global diaspora. From the ancient wisdom of Sanskrit to the vibrant modern expressions of Hindi,
             Bengali, and Tamil, these languages carry millennia of cultural, philosophical, and literary heritage.
           </p>
-          <p>
+          <p style={{fontSize: '1.1rem', marginBottom: '1rem', color: '#555', lineHeight: 1.8}}>
             In our increasingly interconnected world, learning Indic languages opens doors to:
           </p>
-          <ul style={{marginLeft: '2rem', marginTop: '1rem'}}>
-            <li>Business opportunities in growing markets</li>
-            <li>Deeper cultural understanding and connections</li>
-            <li>Access to classical literature and philosophy</li>
-            <li>Enhanced travel and social experiences</li>
-            <li>Career advancement in global companies</li>
+          <ul style={{marginLeft: '2rem', marginTop: '1.5rem', fontSize: '1.1rem', color: '#555', lineHeight: 2}}>
+            <li style={{marginBottom: '0.5rem'}}>Business opportunities in growing markets</li>
+            <li style={{marginBottom: '0.5rem'}}>Deeper cultural understanding and connections</li>
+            <li style={{marginBottom: '0.5rem'}}>Access to classical literature and philosophy</li>
+            <li style={{marginBottom: '0.5rem'}}>Enhanced travel and social experiences</li>
+            <li style={{marginBottom: '0.5rem'}}>Career advancement in global companies</li>
           </ul>
         </section>
 
-        <section style={{marginBottom: '3rem'}}>
-          <h2 style={{fontSize: '2rem', color: '#333', marginBottom: '1rem'}}>Our Approach</h2>
-          <p style={{fontSize: '1.1rem', marginBottom: '1.5rem'}}>
+        <section style={{marginBottom: '5rem'}}>
+          <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em'}}>Our Approach</h2>
+          <p style={{fontSize: '1.2rem', marginBottom: '2rem', color: '#444', lineHeight: 1.8}}>
             We combine cutting-edge technology with time-tested pedagogical methods to create an unparalleled learning experience.
           </p>
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem'}}>
@@ -336,13 +491,23 @@ function AboutPage() {
           </div>
         </section>
 
-        <section style={{textAlign: 'center', padding: '3rem 0', backgroundColor: '#FFF5F2', borderRadius: '12px'}}>
-          <h2 style={{fontSize: '2rem', color: '#333', marginBottom: '1rem'}}>Join Our Mission</h2>
-          <p style={{fontSize: '1.1rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem'}}>
+        <section style={{textAlign: 'center', padding: '4rem 2rem', backgroundColor: '#FFF5F2', borderRadius: '16px', marginTop: '3rem'}}>
+          <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700'}}>Join Our Mission</h2>
+          <p style={{fontSize: '1.25rem', marginBottom: '2.5rem', maxWidth: '650px', margin: '0 auto 2.5rem', color: '#555', lineHeight: 1.7}}>
             We're building more than just a language learning app – we're creating bridges between cultures.
             Join us in our journey to make Indic languages accessible to everyone.
           </p>
-          <Link to="/careers" style={styles.button}>View Career Opportunities</Link>
+          <Link
+            to="/careers"
+            style={{
+              ...styles.button,
+              ...(hoveredButton ? styles.buttonHover : {})
+            }}
+            onMouseEnter={() => setHoveredButton(true)}
+            onMouseLeave={() => setHoveredButton(false)}
+          >
+            View Career Opportunities
+          </Link>
         </section>
       </div>
     </div>
