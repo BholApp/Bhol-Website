@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import WaitlistForm from './components/WaitlistForm';
@@ -834,6 +835,7 @@ function CareersPage() {
 function App() {
   return (
     <div style={styles.container}>
+      <Analytics />
       <Router>
         <Header />
         <main style={styles.main}>
