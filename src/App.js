@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Blog from './pages/Blog';
-import FAQ from './pages/FAQ';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import WaitlistForm from './components/WaitlistForm';
+
+const WAITLIST_SCRIPT_URL = process.env.REACT_APP_WAITLIST_SCRIPT_URL || '';
 
 // Inline styles
 const styles = {
@@ -209,6 +210,64 @@ const styles = {
     paddingTop: '2rem',
     textAlign: 'center',
     color: '#ccc'
+  },
+  waitlist: {
+    backgroundColor: '#FF522B',
+    color: 'white',
+    padding: '4rem 2rem',
+    borderRadius: '16px',
+    textAlign: 'center',
+    margin: '4rem 0'
+  },
+  waitlistForm: {
+    display: 'flex',
+    gap: '1rem',
+    justifyContent: 'center',
+    marginTop: '2rem',
+    flexWrap: 'wrap'
+  },
+  emailInput: {
+    padding: '14px 20px',
+    fontSize: '1rem',
+    borderRadius: '8px',
+    border: 'none',
+    minWidth: '300px',
+    maxWidth: '400px',
+    fontFamily: 'inherit'
+  },
+  submitButton: {
+    backgroundColor: '#333',
+    color: 'white',
+    border: 'none',
+    padding: '14px 32px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+  },
+  submitButtonHover: {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)'
+  },
+  successMessage: {
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    padding: '1rem 2rem',
+    borderRadius: '8px',
+    marginTop: '1rem',
+    display: 'inline-block',
+    fontWeight: '500'
+  },
+  errorMessage: {
+    backgroundColor: '#f44336',
+    color: 'white',
+    padding: '1rem 2rem',
+    borderRadius: '8px',
+    marginTop: '1rem',
+    display: 'inline-block',
+    fontWeight: '500'
   }
 };
 
@@ -269,11 +328,6 @@ function Header() {
         <ul style={isMobile ? (mobileMenuOpen ? styles.navLinksOpen : {display: 'none'}) : styles.navLinks}>
           <li><Link to="/" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Home</Link></li>
           <li><Link to="/about" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>About</Link></li>
-          <li><Link to="/blog" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Blog</Link></li>
-          <li><Link to="/faq" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>FAQ</Link></li>
-          <li><Link to="/careers" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Careers</Link></li>
-          <li><Link to="/privacy" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Privacy</Link></li>
-          <li><Link to="/terms" style={styles.navLink} onClick={closeMobileMenu} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Terms</Link></li>
         </ul>
       </nav>
 
@@ -308,7 +362,6 @@ function Footer() {
 
         <div style={styles.footerSection}>
           <h4 style={styles.footerTitle}>Product</h4>
-          <Link to="/faq" style={styles.footerLink}>FAQ</Link>
           <a href="#waitlist" style={styles.footerLink}>Join Waitlist</a>
           <a href="mailto:hello@bhol.app" style={styles.footerLink}>Contact</a>
         </div>
@@ -316,16 +369,13 @@ function Footer() {
         <div style={styles.footerSection}>
           <h4 style={styles.footerTitle}>Company</h4>
           <Link to="/about" style={styles.footerLink}>About</Link>
-          <Link to="/blog" style={styles.footerLink}>Blog</Link>
           <Link to="/careers" style={styles.footerLink}>Careers</Link>
-          <a href="mailto:press@bhol.app" style={styles.footerLink}>Press</a>
         </div>
 
         <div style={styles.footerSection}>
           <h4 style={styles.footerTitle}>Legal</h4>
           <Link to="/privacy" style={styles.footerLink}>Privacy Policy</Link>
           <Link to="/terms" style={styles.footerLink}>Terms of Service</Link>
-          <a href="mailto:legal@bhol.app" style={styles.footerLink}>Legal</a>
         </div>
       </div>
 
@@ -342,6 +392,34 @@ function Footer() {
 function HomePage() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [hoveredButton, setHoveredButton] = useState(false);
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const faqs = [
+    {
+      q: "What is Bhol?",
+      a: "Bhol is an AI-powered language learning platform focused on making Indic languages (Hindi, Bengali, Tamil, etc.) accessible and engaging for learners worldwide."
+    },
+    {
+      q: "Which languages will be available?",
+      a: "We plan to launch with Hindi, Bengali, and Tamil initially, with more Indic languages (Sanskrit, Gujarati, Telugu, etc.) added based on user demand."
+    },
+    {
+      q: "When will Bhol be available?",
+      a: "We're currently in development and plan to launch our beta soon. Join our waitlist to get early access and be notified when we launch."
+    },
+    {
+      q: "Is Bhol suitable for complete beginners?",
+      a: "Absolutely! Our courses are designed for all levels, from complete beginners to advanced learners. The AI adapts to your pace and learning style."
+    },
+    {
+      q: "Will there be a free version?",
+      a: "Yes, we'll offer a free tier with basic features to help you get started. Premium features will be available through subscription plans."
+    },
+    {
+      q: "Can I use Bhol on multiple devices?",
+      a: "Yes! Bhol will be available on web, iOS, and Android, with seamless synchronization across all your devices."
+    }
+  ];
 
   return (
     <div>
@@ -349,7 +427,7 @@ function HomePage() {
         <h1 style={styles.heroTitle}>Learn Indic Languages</h1>
         <p style={styles.heroSubtitle}>Master Hindi, Bengali, Tamil, and more with interactive lessons and AI-powered practice.</p>
         <a
-          href="#features"
+          href="#waitlist"
           style={{
             ...styles.button,
             ...(hoveredButton ? styles.buttonHover : {})
@@ -357,7 +435,7 @@ function HomePage() {
           onMouseEnter={() => setHoveredButton(true)}
           onMouseLeave={() => setHoveredButton(false)}
         >
-          Start Learning
+          Join Waitlist
         </a>
       </div>
 
@@ -396,12 +474,130 @@ function HomePage() {
           <p style={{color: '#666', lineHeight: 1.7}}>Track your progress with XP points, streaks, and achievements.</p>
         </div>
       </div>
+
+      <section style={{maxWidth: '800px', margin: '4rem auto'}}>
+        <h2 style={{fontSize: '2.5rem', fontWeight: '700', color: '#222', textAlign: 'center', marginBottom: '2.5rem'}}>
+          Frequently Asked Questions
+        </h2>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: '12px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                overflow: 'hidden',
+                border: '1px solid #eee'
+              }}
+            >
+              <button
+                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                style={{
+                  width: '100%',
+                  padding: '1.25rem 1.5rem',
+                  backgroundColor: openFaq === index ? '#FFF5F2' : '#f8f9fa',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  color: '#222',
+                  textAlign: 'left',
+                  transition: 'background-color 0.2s'
+                }}
+              >
+                {faq.q}
+                <span style={{
+                  fontSize: '1.5rem',
+                  color: '#FF522B',
+                  transform: openFaq === index ? 'rotate(45deg)' : 'none',
+                  transition: 'transform 0.2s'
+                }}>+</span>
+              </button>
+              {openFaq === index && (
+                <div style={{
+                  padding: '1.25rem 1.5rem',
+                  color: '#555',
+                  lineHeight: 1.7,
+                  fontSize: '1.05rem',
+                  borderTop: '1px solid #eee'
+                }}>
+                  {faq.a}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
 
 function AboutPage() {
   const [hoveredButton, setHoveredButton] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  const blogPosts = [
+    {
+      id: 1,
+      title: "Welcome to Bhol: Revolutionizing Indic Language Learning",
+      date: "2025-09-05",
+      excerpt: "Introducing Bhol, the AI-powered platform that's making learning Hindi, Bengali, Tamil, and other Indic languages accessible to everyone worldwide.",
+      readTime: "3 min read",
+      fullContent: `
+        <h2>The Language Learning Revolution Begins</h2>
+        <p>Today marks the official launch of Bhol's public beta program! After months of intensive development and testing, we're excited to share our vision for democratizing Indic language education.</p>
+
+        <h3>Why Bhol Matters</h3>
+        <p>Indic languages are spoken by over 1.5 billion people worldwide, yet quality language learning resources have remained inaccessible to most learners outside of traditional academic settings. Bhol changes that by combining:</p>
+        <ul>
+          <li><strong>AI-Powered Personalization:</strong> Our algorithms adapt to your learning style and pace</li>
+          <li><strong>Cultural Immersion:</strong> Learn through authentic stories, music, and cultural contexts</li>
+          <li><strong>Expert Validation:</strong> Content reviewed by linguists and native speakers</li>
+          <li><strong>Community Support:</strong> Connect with fellow learners worldwide</li>
+        </ul>
+
+        <h3>Our Mission</h3>
+        <p>At Bhol, we believe that language barriers shouldn't limit cultural exchange, business opportunities, or personal connections. Our mission is to make Indic languages as accessible as English, Spanish, or Mandarin.</p>
+
+        <h3>Join the Beta</h3>
+        <p>The beta program is now open! Sign up for early access and help shape the future of language learning. Your feedback will be invaluable as we build the most effective Indic language learning platform ever created.</p>
+
+        <p><em>Ready to start your Indic language journey? Join our waitlist today!</em></p>
+      `
+    }
+  ];
+
+  if (selectedPost) {
+    return (
+      <div>
+        <div style={styles.hero}>
+          <h1 style={styles.heroTitle}>Blog</h1>
+        </div>
+        <div style={{maxWidth: '800px', margin: '0 auto', lineHeight: 1.8}}>
+          <button
+            style={{
+              ...styles.button,
+              marginBottom: '2rem',
+              ...(hoveredButton ? styles.buttonHover : {})
+            }}
+            onClick={() => setSelectedPost(null)}
+            onMouseEnter={() => setHoveredButton(true)}
+            onMouseLeave={() => setHoveredButton(false)}
+          >
+            ← Back
+          </button>
+          <h1 style={{fontSize: '2.5rem', fontWeight: '800', color: '#222', marginBottom: '1rem', lineHeight: 1.2}}>{selectedPost.title}</h1>
+          <div style={{color: '#777', marginBottom: '2rem', fontSize: '1rem'}}>{selectedPost.date} • {selectedPost.readTime}</div>
+          <div style={{color: '#444', fontSize: '1.1rem', lineHeight: 1.8}} dangerouslySetInnerHTML={{ __html: selectedPost.fullContent }} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -491,6 +687,34 @@ function AboutPage() {
           </div>
         </section>
 
+        <section style={{marginBottom: '5rem'}}>
+          <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em'}}>From the Blog</h2>
+          <div style={{display: 'grid', gap: '1.5rem'}}>
+            {blogPosts.map((post, index) => (
+              <div
+                key={post.id}
+                style={{
+                  ...styles.card,
+                  textAlign: 'left',
+                  ...(hoveredCard === index ? styles.cardHover : {})
+                }}
+                onMouseEnter={() => setHoveredCard(index)}
+                onMouseLeave={() => setHoveredCard(null)}
+              >
+                <h3 style={{fontSize: '1.5rem', color: '#222', marginBottom: '0.5rem', fontWeight: '700'}}>{post.title}</h3>
+                <p style={{color: '#777', fontSize: '0.9rem', marginBottom: '1rem'}}>{post.date} • {post.readTime}</p>
+                <p style={{color: '#555', lineHeight: 1.7, marginBottom: '1rem'}}>{post.excerpt}</p>
+                <button
+                  onClick={() => setSelectedPost(post)}
+                  style={{background: 'none', border: 'none', color: '#FF522B', fontWeight: '600', cursor: 'pointer', padding: 0, fontSize: '1rem'}}
+                >
+                  Read More →
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section style={{textAlign: 'center', padding: '4rem 2rem', backgroundColor: '#FFF5F2', borderRadius: '16px', marginTop: '3rem'}}>
           <h2 style={{fontSize: '2.5rem', color: '#222', marginBottom: '1.5rem', fontWeight: '700'}}>Join Our Mission</h2>
           <p style={{fontSize: '1.25rem', marginBottom: '2.5rem', maxWidth: '650px', margin: '0 auto 2.5rem', color: '#555', lineHeight: 1.7}}>
@@ -515,40 +739,93 @@ function AboutPage() {
 }
 
 function CareersPage() {
+  const [hoveredCard, setHoveredCard] = useState(null);
+
+  const roles = [
+    {
+      title: "Founding Developer",
+      type: "Full-time • Remote",
+      description: "Build the core of Bhol from the ground up. You'll shape our technical architecture, implement key features, and help define our engineering culture as an early team member."
+    },
+    {
+      title: "UI/UX Designer",
+      type: "Full-time • Remote",
+      description: "Design beautiful, intuitive learning experiences that make language acquisition feel effortless. You'll own the entire design system and craft interfaces that delight users."
+    },
+    {
+      title: "Content Creator",
+      type: "Part-time • Remote",
+      description: "Create engaging language content including stories, exercises, and cultural insights. Native speakers of Hindi, Bengali, Tamil, or other Indic languages encouraged to apply."
+    }
+  ];
+
   return (
     <div>
       <div style={styles.hero}>
         <h1 style={styles.heroTitle}>Join Our Team</h1>
-        <p style={styles.heroSubtitle}>Help us democratize Indic language learning</p>
+        <p style={styles.heroSubtitle}>Help us build the future of Indic language learning</p>
       </div>
-      
-      <div style={{maxWidth: '800px', margin: '0 auto'}}>
-        <h2>Current Openings</h2>
-        
-        <div style={styles.card}>
-          <h3>Frontend Developer</h3>
-          <p><strong>Location:</strong> Remote</p>
-          <p><strong>Type:</strong> Full-time</p>
-          <p>Join our team to build beautiful, responsive user interfaces for our language learning platform.</p>
-        </div>
-        
-        <div style={styles.card}>
-          <h3>Content Creator - Hindi</h3>
-          <p><strong>Location:</strong> Remote</p>
-          <p><strong>Type:</strong> Part-time</p>
-          <p>Create engaging Hindi language content including stories, exercises, and cultural insights.</p>
-        </div>
-        
-        <div style={styles.card}>
-          <h3>UX Designer</h3>
-          <p><strong>Location:</strong> Remote</p>
-          <p><strong>Type:</strong> Contract</p>
-          <p>Design intuitive learning experiences that make language acquisition enjoyable and effective.</p>
-        </div>
-        
-        <p style={{textAlign: 'center', marginTop: '2rem', fontSize: '1.1rem'}}>
-          Reach out to us on <a href="https://twitter.com/bholapp_" target="_blank" rel="noopener noreferrer" style={{color: '#FF522B', fontWeight: 'bold', textDecoration: 'none'}}>X</a>
+
+      <div style={{maxWidth: '900px', margin: '0 auto'}}>
+        <p style={{fontSize: '1.2rem', color: '#555', textAlign: 'center', marginBottom: '3rem', lineHeight: 1.8}}>
+          We're a small, passionate team on a mission to make Indic languages accessible to everyone.
+          If you're excited about language, culture, and building something meaningful, we'd love to hear from you.
         </p>
+
+        <div style={{display: 'grid', gap: '1.5rem', marginBottom: '4rem'}}>
+          {roles.map((role, index) => (
+            <div
+              key={index}
+              style={{
+                ...styles.card,
+                textAlign: 'left',
+                ...(hoveredCard === index ? styles.cardHover : {})
+              }}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              <h3 style={{fontSize: '1.5rem', color: '#222', marginBottom: '0.5rem', fontWeight: '700'}}>{role.title}</h3>
+              <p style={{color: '#FF522B', fontWeight: '600', marginBottom: '1rem', fontSize: '0.95rem'}}>{role.type}</p>
+              <p style={{color: '#555', lineHeight: 1.7, margin: 0}}>{role.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+          backgroundColor: '#FFF5F2',
+          borderRadius: '16px',
+          padding: '3rem',
+          textAlign: 'center'
+        }}>
+          <h2 style={{fontSize: '1.8rem', color: '#222', marginBottom: '1rem', fontWeight: '700'}}>Interested?</h2>
+          <p style={{fontSize: '1.1rem', color: '#555', marginBottom: '2rem', lineHeight: 1.7}}>
+            Reach out to us on X and tell us about yourself
+          </p>
+          <a
+            href="https://twitter.com/bholapp_"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              background: '#000',
+              color: 'white',
+              padding: '14px 28px',
+              borderRadius: '50px',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '1.05rem',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            Message us on X
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -564,12 +841,19 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/careers" element={<CareersPage />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/faq" element={<FAQ />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
           </Routes>
         </main>
+        <section id="waitlist" style={{...styles.waitlist, margin: 0, borderRadius: 0}}>
+          <div style={{maxWidth: '1200px', margin: '0 auto'}}>
+            <h2 style={{fontSize: '2.4rem', fontWeight: 700, marginBottom: '1rem'}}>Be first when new languages drop</h2>
+            <p style={{fontSize: '1.15rem', margin: '0 auto 2rem', maxWidth: 620, lineHeight: 1.7}}>
+              Early waitlisters get beta invites, progress reports, and surprise cultural drops before we open to everyone.
+            </p>
+            <WaitlistForm scriptUrl={WAITLIST_SCRIPT_URL} styles={styles} />
+          </div>
+        </section>
         <Footer />
       </Router>
     </div>
