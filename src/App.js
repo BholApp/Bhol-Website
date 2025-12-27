@@ -835,6 +835,7 @@ function CareersPage() {
 function App() {
   return (
     <div style={styles.container}>
+      <Analytics />
       <Router>
         <Header />
         <main style={styles.main}>
