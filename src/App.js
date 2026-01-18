@@ -5,6 +5,9 @@ import Terms from './pages/Terms';
 import WaitlistForm from './components/WaitlistForm';
 
 const WAITLIST_SCRIPT_URL = process.env.REACT_APP_WAITLIST_SCRIPT_URL || '';
+const API_URL = process.env.REACT_APP_API_URL || '';
+const APP_SECRET = process.env.REACT_APP_APP_SECRET || '';
+const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY || '';
 
 // Inline styles
 const styles = {
@@ -363,7 +366,7 @@ function Footer() {
         <div style={styles.footerSection}>
           <h4 style={styles.footerTitle}>Product</h4>
           <a href="#waitlist" style={styles.footerLink}>Join Waitlist</a>
-          <a href="mailto:hello@bhol.app" style={styles.footerLink}>Contact</a>
+          <Link to="/support" style={styles.footerLink}>Support</Link>
         </div>
 
         <div style={styles.footerSection}>
@@ -738,6 +741,307 @@ function AboutPage() {
   );
 }
 
+function SupportPage() {
+  const [openFaq, setOpenFaq] = useState(null);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [buttonHover, setButtonHover] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = React.useRef(null);
+  const turnstileWidgetId = React.useRef(null);
+
+  // Initialize Turnstile widget
+  React.useEffect(() => {
+    if (!TURNSTILE_SITE_KEY || !window.turnstile || !turnstileRef.current) return;
+
+    // Clean up any existing widget
+    if (turnstileWidgetId.current) {
+      window.turnstile.remove(turnstileWidgetId.current);
+    }
+
+    turnstileWidgetId.current = window.turnstile.render(turnstileRef.current, {
+      sitekey: TURNSTILE_SITE_KEY,
+      callback: (token) => setTurnstileToken(token),
+      'expired-callback': () => setTurnstileToken(''),
+      'error-callback': () => setTurnstileToken(''),
+      theme: 'light',
+    });
+
+    return () => {
+      if (turnstileWidgetId.current) {
+        window.turnstile.remove(turnstileWidgetId.current);
+      }
+    };
+  }, []);
+
+  const resetTurnstile = () => {
+    setTurnstileToken('');
+    if (turnstileWidgetId.current && window.turnstile) {
+      window.turnstile.reset(turnstileWidgetId.current);
+    }
+  };
+
+  const supportFaqs = [
+    {
+      q: "How do I reset my password?",
+      a: "Once we launch, you'll be able to reset your password from the login screen by clicking 'Forgot Password'. We'll send a reset link to your registered email."
+    },
+    {
+      q: "How do I join the waitlist?",
+      a: "Scroll to the bottom of any page and enter your email in the waitlist form. You'll receive a confirmation email and updates about our launch."
+    },
+    {
+      q: "When will Bhol launch?",
+      a: "We're currently in development and plan to launch our beta soon. Join our waitlist to get early access and be the first to know when we go live."
+    },
+    {
+      q: "Which devices will Bhol support?",
+      a: "Bhol will be available on web browsers, iOS, and Android devices. Your progress will sync seamlessly across all platforms."
+    },
+    {
+      q: "How can I provide feedback or report a bug?",
+      a: "Use the contact form below to send us your feedback, bug reports, or feature suggestions. We read every message and appreciate your input!"
+    },
+    {
+      q: "How do I contact the Bhol team?",
+      a: "You can reach us using the contact form below, or email us directly at hello@bhol.app. We typically respond within 24-48 hours."
+    }
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(formData.email)) {
+      setStatus('error');
+      setStatusMessage('Please enter a valid email address.');
+      return;
+    }
+
+    if (!formData.name.trim() || !formData.message.trim()) {
+      setStatus('error');
+      setStatusMessage('Please fill in all fields.');
+      return;
+    }
+
+    if (!API_URL) {
+      setStatus('error');
+      setStatusMessage('Support form is not configured yet. Please email us at hello@bhol.app');
+      return;
+    }
+
+    // Require Turnstile verification if configured
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus('error');
+      setStatusMessage('Please complete the verification challenge.');
+      return;
+    }
+
+    try {
+      setStatus('loading');
+      setStatusMessage('');
+
+      // Format message to include name and email since 'general' source doesn't have those fields
+      const formattedMessage = `[Website Support]\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\n${formData.message.trim()}`;
+
+      const response = await fetch(`${API_URL}/api/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(APP_SECRET && { 'X-App-Secret': APP_SECRET })
+        },
+        body: JSON.stringify({
+          source: 'general',
+          message: formattedMessage,
+          appVersion: 'web-1.0.0',
+          osVersion: 'web',
+          deviceModel: 'browser',
+          userId: formData.email.trim(),
+          turnstileToken: turnstileToken || undefined
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to send message');
+      }
+
+      setStatus('success');
+      setStatusMessage('Message sent! We\'ll get back to you within 24-48 hours.');
+      setFormData({ name: '', email: '', message: '' });
+      resetTurnstile();
+    } catch (error) {
+      setStatus('error');
+      setStatusMessage('Unable to send message. Please email us at hello@bhol.app');
+      resetTurnstile();
+    }
+  };
+
+  const inputStyle = {
+    padding: '14px 16px',
+    fontSize: '1rem',
+    borderRadius: '8px',
+    border: '1px solid #ddd',
+    fontFamily: 'inherit',
+    width: '100%',
+    boxSizing: 'border-box',
+    transition: 'border-color 0.2s'
+  };
+
+  return (
+    <div>
+      <div style={styles.hero}>
+        <h1 style={styles.heroTitle}>Support</h1>
+        <p style={styles.heroSubtitle}>We're here to help you on your language learning journey</p>
+      </div>
+
+      <div style={{maxWidth: '800px', margin: '0 auto'}}>
+        {/* FAQ Section */}
+        <section style={{marginBottom: '4rem'}}>
+          <h2 style={{fontSize: '2rem', fontWeight: '700', color: '#222', marginBottom: '1.5rem'}}>
+            Frequently Asked Questions
+          </h2>
+          <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+            {supportFaqs.map((faq, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: '#fff',
+                  borderRadius: '12px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  overflow: 'hidden',
+                  border: '1px solid #eee'
+                }}
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  style={{
+                    width: '100%',
+                    padding: '1.25rem 1.5rem',
+                    backgroundColor: openFaq === index ? '#FFF5F2' : '#f8f9fa',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    fontSize: '1.1rem',
+                    fontWeight: '600',
+                    color: '#222',
+                    textAlign: 'left',
+                    transition: 'background-color 0.2s'
+                  }}
+                >
+                  {faq.q}
+                  <span style={{
+                    fontSize: '1.5rem',
+                    color: '#FF522B',
+                    transform: openFaq === index ? 'rotate(45deg)' : 'none',
+                    transition: 'transform 0.2s'
+                  }}>+</span>
+                </button>
+                {openFaq === index && (
+                  <div style={{
+                    padding: '1.25rem 1.5rem',
+                    color: '#555',
+                    lineHeight: 1.7,
+                    fontSize: '1.05rem',
+                    borderTop: '1px solid #eee'
+                  }}>
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Contact Form Section */}
+        <section style={{
+          backgroundColor: '#FFF5F2',
+          borderRadius: '16px',
+          padding: '3rem',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{fontSize: '2rem', fontWeight: '700', color: '#222', marginBottom: '0.5rem', textAlign: 'center'}}>
+            Contact Us
+          </h2>
+          <p style={{color: '#555', textAlign: 'center', marginBottom: '2rem', lineHeight: 1.7}}>
+            Can't find your answer above? Send us a message and we'll get back to you.
+          </p>
+
+          <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '500px', margin: '0 auto'}}>
+            <input
+              type="text"
+              placeholder="Your name"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              style={inputStyle}
+              disabled={status === 'loading'}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Your email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              style={inputStyle}
+              disabled={status === 'loading'}
+              required
+            />
+            <textarea
+              placeholder="How can we help?"
+              value={formData.message}
+              onChange={(e) => setFormData({...formData, message: e.target.value})}
+              style={{...inputStyle, minHeight: '150px', resize: 'vertical'}}
+              disabled={status === 'loading'}
+              required
+            />
+            {TURNSTILE_SITE_KEY && (
+              <div
+                ref={turnstileRef}
+                style={{display: 'flex', justifyContent: 'center', margin: '0.5rem 0'}}
+              />
+            )}
+            <button
+              type="submit"
+              style={{
+                ...styles.button,
+                width: '100%',
+                ...(buttonHover ? styles.buttonHover : {})
+              }}
+              onMouseEnter={() => setButtonHover(true)}
+              onMouseLeave={() => setButtonHover(false)}
+              disabled={status === 'loading'}
+            >
+              {status === 'loading' ? 'Sending...' : 'Send Message'}
+            </button>
+          </form>
+
+          {status === 'success' && (
+            <div style={{...styles.successMessage, display: 'block', textAlign: 'center', marginTop: '1.5rem'}}>
+              {statusMessage}
+            </div>
+          )}
+          {status === 'error' && (
+            <div style={{...styles.errorMessage, display: 'block', textAlign: 'center', marginTop: '1.5rem'}}>
+              {statusMessage}
+            </div>
+          )}
+        </section>
+
+        {/* Direct Contact */}
+        <section style={{textAlign: 'center', marginBottom: '2rem'}}>
+          <p style={{color: '#666', fontSize: '1rem'}}>
+            Or email us directly at <a href="mailto:hello@bhol.app" style={{color: '#FF522B', fontWeight: '600'}}>hello@bhol.app</a>
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function CareersPage() {
   const [hoveredCard, setHoveredCard] = useState(null);
 
@@ -841,6 +1145,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/careers" element={<CareersPage />} />
+            <Route path="/support" element={<SupportPage />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
           </Routes>
