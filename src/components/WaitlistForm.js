@@ -2,6 +2,24 @@ import React, { useState } from 'react';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const spinnerStyle = {
+  display: 'inline-block',
+  width: 16,
+  height: 16,
+  border: '2px solid rgba(255, 255, 255, 0.3)',
+  borderTopColor: '#fff',
+  borderRadius: '50%',
+  animation: 'spin 0.8s linear infinite',
+  marginRight: 8,
+  verticalAlign: 'middle',
+};
+
+const keyframes = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+
 function WaitlistForm({ scriptUrl, styles }) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
@@ -55,8 +73,9 @@ function WaitlistForm({ scriptUrl, styles }) {
 
   return (
     <div>
+      <style>{keyframes}</style>
       <p style={{ maxWidth: 520, margin: '0 auto', lineHeight: 1.8 }}>
-        Join thousands of learners getting early access to Bhol. We’ll send a note
+        Join thousands of learners getting early access to Bhol. We'll send a note
         as soon as new language modules unlock.
       </p>
 
@@ -81,7 +100,12 @@ function WaitlistForm({ scriptUrl, styles }) {
           onMouseLeave={() => setButtonHover(false)}
           disabled={status === 'loading'}
         >
-          {status === 'loading' ? 'Joining...' : 'Join the Waitlist'}
+          {status === 'loading' ? (
+            <>
+              <span style={spinnerStyle} />
+              Joining...
+            </>
+          ) : 'Join the Waitlist'}
         </button>
       </form>
 
