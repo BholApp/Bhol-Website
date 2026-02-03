@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { styles, colors } from '../styles/theme';
 import { HoverCard, HoverButton } from '../components/HoverCard';
 import { FAQAccordion } from '../components/FAQAccordion';
@@ -22,6 +22,214 @@ const features = [
   }
 ];
 
+// App screenshots from the app store
+const appScreenshots = [
+  { src: '/1315.png', alt: 'Bhol App - Language Selection' },
+  { src: '/1316.png', alt: 'Bhol App - Learning Dashboard' },
+  { src: '/1317.png', alt: 'Bhol App - Flashcard Practice' },
+  { src: '/1318.png', alt: 'Bhol App - Story Mode' },
+  { src: '/1319.png', alt: 'Bhol App - Progress Tracking' },
+  { src: '/1320.png', alt: 'Bhol App - Achievements' },
+  { src: '/1321.png', alt: 'Bhol App - Settings' },
+];
+
+const screenshotStyles = {
+  section: {
+    padding: '4rem 0',
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: '2.5rem',
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: '1rem',
+  },
+  sectionSubtitle: {
+    fontSize: '1.2rem',
+    color: colors.textMuted,
+    marginBottom: '3rem',
+    maxWidth: '600px',
+    margin: '0 auto 3rem',
+  },
+  carouselContainer: {
+    position: 'relative',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    padding: '2rem 0',
+  },
+  carouselTrack: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '1.5rem',
+    transition: 'transform 0.5s ease-in-out',
+  },
+  screenshotWrapper: {
+    flexShrink: 0,
+    transition: 'all 0.4s ease',
+    borderRadius: '24px',
+    overflow: 'hidden',
+    boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+  },
+  screenshotWrapperActive: {
+    transform: 'scale(1.05)',
+    boxShadow: '0 30px 80px rgba(255, 82, 43, 0.25)',
+  },
+  screenshot: {
+    width: '280px',
+    height: 'auto',
+    display: 'block',
+    borderRadius: '24px',
+  },
+  navButton: {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    background: colors.primaryGradient,
+    color: 'white',
+    border: 'none',
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 4px 15px rgba(255, 82, 43, 0.3)',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    zIndex: 10,
+  },
+  navButtonHover: {
+    transform: 'translateY(-50%) scale(1.1)',
+    boxShadow: '0 6px 20px rgba(255, 82, 43, 0.4)',
+  },
+  dots: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '0.75rem',
+    marginTop: '2rem',
+  },
+  dot: {
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    backgroundColor: colors.border,
+  },
+  dotActive: {
+    backgroundColor: colors.primary,
+    transform: 'scale(1.2)',
+  },
+};
+
+function ScreenshotCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredButton, setHoveredButton] = useState(null);
+
+  const nextSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % appScreenshots.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + appScreenshots.length) % appScreenshots.length);
+  }, []);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(nextSlide, 4000);
+    return () => clearInterval(interval);
+  }, [isHovered, nextSlide]);
+
+  // Calculate visible screenshots (show 3 on larger screens)
+  const getVisibleScreenshots = () => {
+    const result = [];
+    for (let i = -1; i <= 1; i++) {
+      const index = (activeIndex + i + appScreenshots.length) % appScreenshots.length;
+      result.push({ ...appScreenshots[index], originalIndex: index, offset: i });
+    }
+    return result;
+  };
+
+  return (
+    <div 
+      style={screenshotStyles.carouselContainer}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Navigation Buttons */}
+      <button
+        onClick={prevSlide}
+        style={{
+          ...screenshotStyles.navButton,
+          left: '20px',
+          ...(hoveredButton === 'prev' ? screenshotStyles.navButtonHover : {}),
+        }}
+        onMouseEnter={() => setHoveredButton('prev')}
+        onMouseLeave={() => setHoveredButton(null)}
+        aria-label="Previous screenshot"
+      >
+        &#8249;
+      </button>
+
+      <button
+        onClick={nextSlide}
+        style={{
+          ...screenshotStyles.navButton,
+          right: '20px',
+          ...(hoveredButton === 'next' ? screenshotStyles.navButtonHover : {}),
+        }}
+        onMouseEnter={() => setHoveredButton('next')}
+        onMouseLeave={() => setHoveredButton(null)}
+        aria-label="Next screenshot"
+      >
+        &#8250;
+      </button>
+
+      {/* Screenshots Track */}
+      <div style={screenshotStyles.carouselTrack}>
+        {getVisibleScreenshots().map((screenshot, idx) => (
+          <div
+            key={screenshot.originalIndex}
+            style={{
+              ...screenshotStyles.screenshotWrapper,
+              ...(screenshot.offset === 0 ? screenshotStyles.screenshotWrapperActive : {}),
+              opacity: screenshot.offset === 0 ? 1 : 0.6,
+              transform: screenshot.offset === 0 ? 'scale(1.05)' : 'scale(0.9)',
+            }}
+          >
+            <img
+              src={screenshot.src}
+              alt={screenshot.alt}
+              style={screenshotStyles.screenshot}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Dots Navigation */}
+      <div style={screenshotStyles.dots}>
+        {appScreenshots.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setActiveIndex(index)}
+            style={{
+              ...screenshotStyles.dot,
+              ...(index === activeIndex ? screenshotStyles.dotActive : {}),
+            }}
+            aria-label={`Go to screenshot ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function HomePage() {
   return (
     <div>
@@ -35,6 +243,15 @@ export function HomePage() {
           Join Waitlist
         </HoverButton>
       </div>
+
+      {/* App Screenshots Section */}
+      <section style={screenshotStyles.section} id="screenshots">
+        <h2 style={screenshotStyles.sectionTitle}>See Bhol in Action</h2>
+        <p style={screenshotStyles.sectionSubtitle}>
+          Beautiful, intuitive design that makes language learning a joy. Available on iOS and Android.
+        </p>
+        <ScreenshotCarousel />
+      </section>
 
       {/* Features Grid */}
       <div style={styles.grid} id="features">
