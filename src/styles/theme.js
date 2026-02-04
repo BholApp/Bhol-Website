@@ -31,11 +31,12 @@ export const styles = {
   header: {
     background: colors.primaryGradient,
     color: 'white',
-    padding: '1rem 0',
+    padding: '0.75rem 0',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    marginTop: 0
   },
   nav: {
     maxWidth: '1200px',

@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { styles } from '../../styles/theme';
 
+const APP_STORE_URL = 'https://apps.apple.com/us/app/bhol/id6755904064';
+
 export function Footer() {
   return (
     <footer style={styles.footer}>
       <div style={styles.footerContent}>
         <div style={styles.footerSection}>
           <h3 style={styles.footerTitle}>Bhol</h3>
-          <p>Learn Indic languages with AI-powered personalized education. Master Hindi, Bengali, Tamil, and more.</p>
+          <p>Learn Gujarati the way your family speaks. Connect with your heritage through real conversations.</p>
           <div style={styles.socialLinks}>
             <a href="https://twitter.com/bholapp_" style={styles.socialIcon} aria-label="Twitter" target="_blank" rel="noopener noreferrer">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +27,7 @@ export function Footer() {
 
         <div style={styles.footerSection}>
           <h4 style={styles.footerTitle}>Product</h4>
-          <a href="#waitlist" style={styles.footerLink}>Join Waitlist</a>
+          <a href={APP_STORE_URL} style={styles.footerLink} target="_blank" rel="noopener noreferrer">Download App</a>
           <Link to="/support" style={styles.footerLink}>Support</Link>
         </div>
 
@@ -43,9 +45,9 @@ export function Footer() {
       </div>
 
       <div style={styles.footerBottom}>
-        <p>&copy; 2025 Bhol. Learn Indic languages with confidence.</p>
+        <p>&copy; 2025 Bhol. Finally talk back to Nani.</p>
         <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
-          Made with ❤️ for language learners worldwide
+          Made with love for heritage speakers everywhere
         </p>
       </div>
     </footer>
