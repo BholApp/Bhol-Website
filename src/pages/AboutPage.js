@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { styles, colors } from '../styles/theme';
+import { styles, colors, fonts } from '../styles/theme';
 import { HoverCard, HoverButton } from '../components/HoverCard';
 import { blogPosts } from '../data';
 
 const missionCards = [
   {
-    icon: '🌍',
+    icon: '01',
     title: 'Global Accessibility',
     description: 'Break down barriers to Indic language education through innovative technology and affordable pricing.'
   },
   {
-    icon: '🎯',
+    icon: '02',
     title: 'Cultural Authenticity',
     description: 'Preserve and promote the rich cultural context of each language through authentic content and native speakers.'
   },
   {
-    icon: '🚀',
+    icon: '03',
     title: 'Personalized Learning',
     description: 'Leverage AI and data-driven insights to create personalized learning experiences for every student.'
   }
@@ -37,31 +37,39 @@ const languageBenefits = [
   'Career advancement in global companies'
 ];
 
+const sectionHeading = {
+  fontSize: '2rem',
+  fontFamily: fonts.heading,
+  fontWeight: '400',
+  color: colors.text,
+  marginBottom: '1rem',
+  letterSpacing: '-0.01em',
+};
+
 export function AboutPage() {
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // Blog post detail view
   if (selectedPost) {
     return (
       <div>
         <div style={styles.hero}>
           <h1 style={styles.heroTitle}>Blog</h1>
         </div>
-        <div style={{ maxWidth: '800px', margin: '0 auto', lineHeight: 1.8 }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto', lineHeight: 1.8 }}>
           <HoverButton
             onClick={() => setSelectedPost(null)}
-            style={{ marginBottom: '2rem' }}
+            style={{ marginBottom: '2rem', fontSize: '0.9rem' }}
           >
-            ← Back
+            &larr; Back
           </HoverButton>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: colors.text, marginBottom: '1rem', lineHeight: 1.2 }}>
+          <h1 style={{ ...sectionHeading, fontSize: '2.2rem', marginBottom: '0.5rem' }}>
             {selectedPost.title}
           </h1>
-          <div style={{ color: '#777', marginBottom: '2rem', fontSize: '1rem' }}>
-            {selectedPost.date} • {selectedPost.readTime}
+          <div style={{ color: colors.textMuted, marginBottom: '2rem', fontSize: '0.9rem' }}>
+            {selectedPost.date} &middot; {selectedPost.readTime}
           </div>
           <div
-            style={{ color: '#444', fontSize: '1.1rem', lineHeight: 1.8 }}
+            style={{ color: colors.textLight, fontSize: '1.05rem', lineHeight: 1.8 }}
             dangerouslySetInnerHTML={{ __html: selectedPost.fullContent }}
           />
         </div>
@@ -71,24 +79,21 @@ export function AboutPage() {
 
   return (
     <div>
-      {/* Hero */}
       <div style={styles.hero}>
         <h1 style={styles.heroTitle}>About Bhol</h1>
         <p style={styles.heroSubtitle}>Bridging cultures through language learning</p>
       </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto', lineHeight: 1.8 }}>
+      <div style={{ maxWidth: '750px', margin: '0 auto', lineHeight: 1.7 }}>
         {/* Our Story */}
-        <section style={{ marginBottom: '5rem' }}>
-          <h2 style={{ fontSize: '2.5rem', color: colors.text, marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
-            Our Story
-          </h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: '#444', lineHeight: 1.8 }}>
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={sectionHeading}>Our Story</h2>
+          <p style={{ fontSize: '1.05rem', marginBottom: '1rem', color: colors.textLight, lineHeight: 1.7 }}>
             Bhol was born from a simple observation: while the world becomes increasingly connected, language barriers continue to divide us.
             Our founders, having experienced the challenges of learning Indic languages firsthand, recognized that traditional language learning
             methods were not keeping pace with modern technology or the diverse needs of today's learners.
           </p>
-          <p style={{ fontSize: '1.1rem', color: colors.textLight, lineHeight: 1.8 }}>
+          <p style={{ fontSize: '1rem', color: colors.textMuted, lineHeight: 1.7 }}>
             What started as a personal project to help friends and family learn Hindi has evolved into a mission to democratize
             access to Indic language education. We believe that everyone should have the opportunity to connect with the rich
             cultural heritage of India, Pakistan, Bangladesh, and Nepal through their languages.
@@ -96,84 +101,103 @@ export function AboutPage() {
         </section>
 
         {/* Our Mission */}
-        <section style={{ marginBottom: '5rem' }}>
-          <h2 style={{ fontSize: '2.5rem', color: colors.text, marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
-            Our Mission
-          </h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: '#444', lineHeight: 1.8 }}>
-            To make Indic languages accessible, engaging, and culturally rich for learners worldwide. We envision a world where
-            language barriers don't limit cultural exchange, business opportunities, or personal connections.
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={sectionHeading}>Our Mission</h2>
+          <p style={{ fontSize: '1.05rem', marginBottom: '1.5rem', color: colors.textLight, lineHeight: 1.7 }}>
+            To make Indic languages accessible, engaging, and culturally rich for learners worldwide.
           </p>
           <div style={styles.grid}>
             {missionCards.map((card, index) => (
-              <HoverCard key={index}>
-                <h3>{card.icon} {card.title}</h3>
-                <p>{card.description}</p>
+              <HoverCard key={index} style={{ textAlign: 'left' }}>
+                <div style={{
+                  fontSize: '0.75rem',
+                  fontWeight: '700',
+                  color: colors.primary,
+                  marginBottom: '0.5rem',
+                  letterSpacing: '0.05em',
+                }}>
+                  {card.icon}
+                </div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: colors.text, marginBottom: '0.5rem' }}>
+                  {card.title}
+                </h3>
+                <p style={{ fontSize: '0.95rem', color: colors.textMuted, margin: 0, lineHeight: 1.6 }}>
+                  {card.description}
+                </p>
               </HoverCard>
             ))}
           </div>
         </section>
 
         {/* Why Indic Languages Matter */}
-        <section style={{ marginBottom: '5rem' }}>
-          <h2 style={{ fontSize: '2.5rem', color: colors.text, marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
-            Why Indic Languages Matter
-          </h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: '#444', lineHeight: 1.8 }}>
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={sectionHeading}>Why Indic Languages Matter</h2>
+          <p style={{ fontSize: '1.05rem', marginBottom: '1rem', color: colors.textLight, lineHeight: 1.7 }}>
             Indic languages represent one of the world's largest and most diverse language families, spoken by over 1.5 billion people
-            across South Asia and the global diaspora. From the ancient wisdom of Sanskrit to the vibrant modern expressions of Hindi,
-            Bengali, and Tamil, these languages carry millennia of cultural, philosophical, and literary heritage.
+            across South Asia and the global diaspora.
           </p>
-          <p style={{ fontSize: '1.1rem', marginBottom: '1rem', color: colors.textLight, lineHeight: 1.8 }}>
-            In our increasingly interconnected world, learning Indic languages opens doors to:
-          </p>
-          <ul style={{ marginLeft: '2rem', marginTop: '1.5rem', fontSize: '1.1rem', color: colors.textLight, lineHeight: 2 }}>
+          <ul style={{
+            marginLeft: '1.5rem',
+            marginTop: '1rem',
+            fontSize: '0.95rem',
+            color: colors.textMuted,
+            lineHeight: 2,
+            paddingLeft: 0,
+            listStylePosition: 'inside',
+          }}>
             {languageBenefits.map((benefit, index) => (
-              <li key={index} style={{ marginBottom: '0.5rem' }}>{benefit}</li>
+              <li key={index} style={{ marginBottom: '0.25rem' }}>{benefit}</li>
             ))}
           </ul>
         </section>
 
         {/* Our Approach */}
-        <section style={{ marginBottom: '5rem' }}>
-          <h2 style={{ fontSize: '2.5rem', color: colors.text, marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
-            Our Approach
-          </h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: '#444', lineHeight: 1.8 }}>
-            We combine cutting-edge technology with time-tested pedagogical methods to create an unparalleled learning experience.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={sectionHeading}>Our Approach</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
             {approachCards.map((card, index) => (
-              <div key={index} style={{ padding: '1.5rem', backgroundColor: colors.backgroundAlt, borderRadius: '8px' }}>
-                <h4 style={{ color: colors.primary, marginBottom: '0.5rem' }}>{card.title}</h4>
-                <p>{card.description}</p>
+              <div key={index} style={{
+                padding: '1.25rem',
+                backgroundColor: colors.cream,
+                borderRadius: '12px',
+                border: `1px solid ${colors.border}`,
+              }}>
+                <h4 style={{ color: colors.text, marginBottom: '0.4rem', fontSize: '0.95rem', fontWeight: '600' }}>{card.title}</h4>
+                <p style={{ color: colors.textMuted, margin: 0, fontSize: '0.9rem', lineHeight: 1.6 }}>{card.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* From the Blog */}
-        <section style={{ marginBottom: '5rem' }}>
-          <h2 style={{ fontSize: '2.5rem', color: colors.text, marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
-            From the Blog
-          </h2>
-          <div style={{ display: 'grid', gap: '1.5rem' }}>
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={sectionHeading}>From the Blog</h2>
+          <div style={{ display: 'grid', gap: '1rem' }}>
             {blogPosts.map((post) => (
               <HoverCard key={post.id} style={{ textAlign: 'left' }}>
-                <h3 style={{ fontSize: '1.5rem', color: colors.text, marginBottom: '0.5rem', fontWeight: '700' }}>
+                <h3 style={{ fontSize: '1.2rem', color: colors.text, marginBottom: '0.4rem', fontWeight: '600' }}>
                   {post.title}
                 </h3>
-                <p style={{ color: '#777', fontSize: '0.9rem', marginBottom: '1rem' }}>
-                  {post.date} • {post.readTime}
+                <p style={{ color: colors.textMuted, fontSize: '0.8rem', marginBottom: '0.75rem' }}>
+                  {post.date} &middot; {post.readTime}
                 </p>
-                <p style={{ color: colors.textLight, lineHeight: 1.7, marginBottom: '1rem' }}>
+                <p style={{ color: colors.textLight, lineHeight: 1.6, marginBottom: '0.75rem', fontSize: '0.95rem' }}>
                   {post.excerpt}
                 </p>
                 <button
                   onClick={() => setSelectedPost(post)}
-                  style={{ background: 'none', border: 'none', color: colors.primary, fontWeight: '600', cursor: 'pointer', padding: 0, fontSize: '1rem' }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: colors.primary,
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    padding: 0,
+                    fontSize: '0.9rem',
+                    fontFamily: 'inherit',
+                  }}
                 >
-                  Read More →
+                  Read More &rarr;
                 </button>
               </HoverCard>
             ))}
@@ -181,13 +205,26 @@ export function AboutPage() {
         </section>
 
         {/* Join Our Mission */}
-        <section style={{ textAlign: 'center', padding: '4rem 2rem', backgroundColor: colors.primaryLight, borderRadius: '16px', marginTop: '3rem' }}>
-          <h2 style={{ fontSize: '2.5rem', color: colors.text, marginBottom: '1.5rem', fontWeight: '700' }}>
+        <section style={{
+          textAlign: 'center',
+          padding: '3rem 2rem',
+          backgroundColor: colors.cream,
+          borderRadius: '20px',
+          border: `1px solid ${colors.border}`,
+          marginBottom: '1rem',
+        }}>
+          <h2 style={{ ...sectionHeading, fontSize: '2rem', marginBottom: '0.75rem' }}>
             Join Our Mission
           </h2>
-          <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', maxWidth: '650px', margin: '0 auto 2.5rem', color: colors.textLight, lineHeight: 1.7 }}>
-            We're building more than just a language learning app – we're creating bridges between cultures.
-            Join us in our journey to make Indic languages accessible to everyone.
+          <p style={{
+            fontSize: '1.05rem',
+            marginBottom: '1.5rem',
+            maxWidth: '500px',
+            margin: '0 auto 1.5rem',
+            color: colors.textMuted,
+            lineHeight: 1.6,
+          }}>
+            We're building bridges between cultures. Join us in making Indic languages accessible to everyone.
           </p>
           <HoverButton as={Link} to="/careers">
             View Career Opportunities

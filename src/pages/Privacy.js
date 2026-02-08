@@ -3,27 +3,30 @@ import React from 'react';
 const styles = {
   hero: {
     textAlign: 'center',
-    padding: '4rem 1rem',
-    backgroundColor: '#FFF5F2',
-    borderRadius: '12px',
-    margin: '2rem 0'
+    padding: '3rem 2rem',
+    backgroundColor: '#F7F5F2',
+    borderRadius: '20px',
+    margin: '1rem 0 2rem',
+    border: '1px solid #E8E5E1',
   },
   heroTitle: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '1rem'
+    fontSize: '2.8rem',
+    fontWeight: '400',
+    fontFamily: "'DM Serif Display', Georgia, serif",
+    color: '#1A1A1A',
+    marginBottom: '1rem',
+    lineHeight: 1.15,
   },
   heroSubtitle: {
-    fontSize: '1.2rem',
-    color: '#666',
+    fontSize: '1.15rem',
+    color: '#7A7A7A',
     marginBottom: '2rem'
   },
   content: {
-    maxWidth: '800px',
+    maxWidth: '700px',
     margin: '0 auto',
-    lineHeight: '1.6',
-    color: '#555'
+    lineHeight: '1.7',
+    color: '#4A4A4A'
   },
   section: {
     marginBottom: '2rem'

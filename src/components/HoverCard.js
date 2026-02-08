@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import { styles } from '../styles/theme';
+import { styles, fonts } from '../styles/theme';
 
-/**
- * Reusable card component with hover effect
- * @param {React.ReactNode} children - Card content
- * @param {object} style - Additional styles to merge
- * @param {function} onClick - Optional click handler
- */
 export function HoverCard({ children, style = {}, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -26,13 +20,6 @@ export function HoverCard({ children, style = {}, onClick }) {
   );
 }
 
-/**
- * Reusable button with hover effect
- * @param {React.ReactNode} children - Button content
- * @param {object} style - Additional styles to merge
- * @param {string} as - Element type ('button', 'a', or custom component)
- * @param {object} props - Additional props to pass through
- */
 export function HoverButton({ children, style = {}, as: Component = 'button', ...props }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -40,6 +27,7 @@ export function HoverButton({ children, style = {}, as: Component = 'button', ..
     <Component
       style={{
         ...styles.button,
+        fontFamily: fonts.body,
         ...(isHovered ? styles.buttonHover : {}),
         ...style
       }}

@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import { colors } from '../styles/theme';
+import { colors, fonts } from '../styles/theme';
 
-/**
- * Reusable FAQ Accordion component
- * @param {Array} faqs - Array of { q: string, a: string } objects
- * @param {string} title - Optional section title
- */
 export function FAQAccordion({ faqs, title }) {
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -14,63 +9,66 @@ export function FAQAccordion({ faqs, title }) {
   };
 
   return (
-    <section style={{ maxWidth: '800px', margin: '4rem auto' }}>
+    <section style={{ maxWidth: '700px', margin: '2.5rem auto' }}>
       {title && (
         <h2 style={{
-          fontSize: '2.5rem',
-          fontWeight: '700',
+          fontSize: '2rem',
+          fontWeight: '400',
+          fontFamily: fonts.heading,
           color: colors.text,
           textAlign: 'center',
-          marginBottom: '2.5rem'
+          marginBottom: '1.5rem'
         }}>
           {title}
         </h2>
       )}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {faqs.map((faq, index) => (
           <div
             key={index}
             style={{
               backgroundColor: colors.white,
               borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
               overflow: 'hidden',
-              border: `1px solid ${colors.border}`
+              border: `1px solid ${openIndex === index ? colors.borderDark : colors.border}`,
+              transition: 'border-color 0.2s',
             }}
           >
             <button
               onClick={() => toggleFaq(index)}
               style={{
                 width: '100%',
-                padding: '1.25rem 1.5rem',
-                backgroundColor: openIndex === index ? colors.primaryLight : colors.backgroundAlt,
+                padding: '1rem 1.25rem',
+                backgroundColor: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                fontSize: '1.1rem',
-                fontWeight: '600',
+                fontSize: '0.95rem',
+                fontWeight: '500',
+                fontFamily: 'inherit',
                 color: colors.text,
                 textAlign: 'left',
-                transition: 'background-color 0.2s'
+                transition: 'background-color 0.2s',
+                gap: '1rem',
               }}
             >
               {faq.q}
               <span style={{
-                fontSize: '1.5rem',
-                color: colors.primary,
+                fontSize: '1.2rem',
+                color: colors.textMuted,
                 transform: openIndex === index ? 'rotate(45deg)' : 'none',
-                transition: 'transform 0.2s'
+                transition: 'transform 0.2s',
+                flexShrink: 0,
               }}>+</span>
             </button>
             {openIndex === index && (
               <div style={{
-                padding: '1.25rem 1.5rem',
-                color: colors.textLight,
+                padding: '0 1.25rem 1rem',
+                color: colors.textMuted,
                 lineHeight: 1.7,
-                fontSize: '1.05rem',
-                borderTop: `1px solid ${colors.border}`
+                fontSize: '0.95rem',
               }}>
                 {faq.a}
               </div>

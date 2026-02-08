@@ -1,45 +1,59 @@
 /**
  * Theme and styles configuration
+ * Warm, refined aesthetic with tight spacing
  */
 
 export const colors = {
   primary: '#FF522B',
-  primaryGradient: 'linear-gradient(90deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
-  primaryLight: '#FFF5F2',
-  text: '#222',
-  textLight: '#555',
-  textMuted: '#666',
+  primaryGradient: 'linear-gradient(135deg, #FF6B3D 0%, #FF3D2E 100%)',
+  primaryLight: '#FFF8F5',
+  primaryMuted: 'rgba(255, 82, 43, 0.08)',
+  text: '#1A1A1A',
+  textLight: '#4A4A4A',
+  textMuted: '#7A7A7A',
   white: '#fff',
-  background: '#fff',
-  backgroundAlt: '#f8f9fa',
-  border: '#eee',
-  borderDark: '#ddd',
-  footer: '#333',
-  success: '#4CAF50',
-  error: '#f44336',
+  cream: '#F7F5F2',
+  background: '#FAFAF8',
+  backgroundAlt: '#F2F0ED',
+  border: '#E8E5E1',
+  borderDark: '#D4D0CC',
+  footer: '#1A1A1A',
+  success: '#2D8B4E',
+  error: '#D93025',
+};
+
+export const fonts = {
+  heading: "'DM Serif Display', Georgia, 'Times New Roman', serif",
+  body: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  mono: "'JetBrains Mono', 'SF Mono', monospace",
 };
 
 export const styles = {
   container: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily: fonts.body,
     margin: 0,
     padding: 0,
     minHeight: '100vh',
-    backgroundColor: colors.white,
-    lineHeight: 1.7
+    backgroundColor: colors.background,
+    lineHeight: 1.6,
+    color: colors.text,
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale',
   },
   header: {
-    background: colors.primaryGradient,
-    color: 'white',
-    padding: '0.75rem 0',
+    background: colors.white,
+    color: colors.text,
+    padding: '0.6rem 0',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    borderBottom: `1px solid ${colors.border}`,
+    backdropFilter: 'blur(20px)',
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
     marginTop: 0
   },
   nav: {
-    maxWidth: '1200px',
+    maxWidth: '1100px',
     margin: '0 auto',
     display: 'flex',
     justifyContent: 'space-between',
@@ -48,29 +62,31 @@ export const styles = {
     position: 'relative'
   },
   logo: {
-    fontSize: '2rem',
-    fontWeight: 'bold',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    fontFamily: fonts.heading,
     textDecoration: 'none',
-    color: 'white',
-    zIndex: 1001
+    color: colors.text,
+    zIndex: 1001,
+    letterSpacing: '-0.01em',
   },
   hamburger: {
     display: 'none',
     flexDirection: 'column',
     cursor: 'pointer',
     zIndex: 1001,
-    gap: '4px'
+    gap: '5px'
   },
   hamburgerLine: {
-    width: '25px',
-    height: '3px',
-    backgroundColor: 'white',
+    width: '22px',
+    height: '2px',
+    backgroundColor: colors.text,
     transition: 'all 0.3s ease',
-    borderRadius: '2px'
+    borderRadius: '1px'
   },
   navLinks: {
     display: 'flex',
-    gap: '2.5rem',
+    gap: '2rem',
     listStyle: 'none',
     margin: 0,
     padding: 0,
@@ -83,24 +99,25 @@ export const styles = {
     top: 0,
     right: 0,
     height: '100vh',
-    width: '70%',
-    maxWidth: '300px',
-    background: 'linear-gradient(180deg, rgba(255, 167, 59, 1) 0%, rgba(255, 91, 69, 1) 66%, rgba(255, 160, 8, 1) 100%)',
+    width: '75%',
+    maxWidth: '320px',
+    background: colors.white,
     padding: '5rem 2rem 2rem',
-    gap: '2rem',
+    gap: '1.5rem',
     listStyle: 'none',
     margin: 0,
-    boxShadow: '-2px 0 10px rgba(0,0,0,0.2)',
+    boxShadow: '-8px 0 30px rgba(0,0,0,0.08)',
     transition: 'transform 0.3s ease',
     zIndex: 1000
   },
   navLink: {
-    color: 'white',
+    color: colors.textLight,
     textDecoration: 'none',
-    fontSize: '1.05rem',
-    transition: 'opacity 0.2s',
+    fontSize: '0.95rem',
+    transition: 'color 0.2s',
     fontWeight: '500',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    letterSpacing: '0.01em',
   },
   overlay: {
     position: 'fixed',
@@ -108,86 +125,92 @@ export const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     zIndex: 999,
     transition: 'opacity 0.3s ease'
   },
   main: {
-    maxWidth: '1200px',
+    maxWidth: '1100px',
     margin: '0 auto',
-    padding: '3rem 1.5rem'
+    padding: '2rem 1.5rem'
   },
   hero: {
     textAlign: 'center',
-    padding: '5rem 2rem',
-    backgroundColor: colors.primaryLight,
-    borderRadius: '16px',
-    margin: '3rem 0'
+    padding: '3rem 2rem',
+    backgroundColor: colors.cream,
+    borderRadius: '20px',
+    margin: '1rem 0 2rem',
+    border: `1px solid ${colors.border}`,
   },
   heroTitle: {
-    fontSize: '3.5rem',
-    fontWeight: '800',
+    fontSize: '2.8rem',
+    fontWeight: '400',
+    fontFamily: fonts.heading,
     color: colors.text,
-    marginBottom: '1.5rem',
-    lineHeight: 1.2,
+    marginBottom: '1rem',
+    lineHeight: 1.15,
     letterSpacing: '-0.02em'
   },
   heroSubtitle: {
-    fontSize: '1.35rem',
-    color: colors.textLight,
-    marginBottom: '2.5rem',
+    fontSize: '1.15rem',
+    color: colors.textMuted,
+    marginBottom: '2rem',
     lineHeight: 1.6,
-    maxWidth: '700px',
-    margin: '0 auto 2.5rem'
+    maxWidth: '520px',
+    margin: '0 auto 2rem'
   },
   button: {
-    background: colors.primaryGradient,
+    background: colors.text,
     color: 'white',
     border: 'none',
-    padding: '14px 32px',
-    fontSize: '1.05rem',
+    padding: '12px 28px',
+    fontSize: '0.95rem',
     fontWeight: '600',
-    borderRadius: '8px',
+    fontFamily: fonts.body,
+    borderRadius: '10px',
     cursor: 'pointer',
     textDecoration: 'none',
     display: 'inline-block',
-    transition: 'transform 0.2s, box-shadow 0.2s',
-    boxShadow: '0 4px 12px rgba(255, 82, 43, 0.3)'
+    transition: 'transform 0.2s, box-shadow 0.2s, background 0.2s',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
+    letterSpacing: '0.01em',
   },
   buttonHover: {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 6px 20px rgba(255, 82, 43, 0.4)'
+    transform: 'translateY(-1px)',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.18)',
+    background: '#333',
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '2.5rem',
-    margin: '4rem 0'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '1.25rem',
+    margin: '2rem 0'
   },
   card: {
-    padding: '2.5rem',
+    padding: '2rem',
     backgroundColor: colors.white,
     borderRadius: '16px',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+    border: `1px solid ${colors.border}`,
     textAlign: 'center',
-    transition: 'transform 0.3s, box-shadow 0.3s',
+    transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
     cursor: 'pointer'
   },
   cardHover: {
-    transform: 'translateY(-8px)',
-    boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+    transform: 'translateY(-4px)',
+    boxShadow: '0 12px 32px rgba(0,0,0,0.06)',
+    borderColor: colors.borderDark,
   },
   footer: {
     backgroundColor: colors.footer,
     color: 'white',
-    padding: '3rem 1rem 2rem',
-    marginTop: '4rem'
+    padding: '3rem 1.5rem 2rem',
+    marginTop: '3rem'
   },
   footerContent: {
-    maxWidth: '1200px',
+    maxWidth: '1100px',
     margin: '0 auto',
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: '2rem',
     marginBottom: '2rem'
   },
@@ -195,103 +218,111 @@ export const styles = {
     textAlign: 'left'
   },
   footerTitle: {
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
+    fontSize: '0.8rem',
+    fontWeight: '600',
     marginBottom: '1rem',
-    color: colors.primary
+    color: 'rgba(255,255,255,0.5)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.1em',
   },
   footerLink: {
-    color: 'white',
+    color: 'rgba(255,255,255,0.8)',
     textDecoration: 'none',
     display: 'block',
-    marginBottom: '0.5rem',
-    transition: 'opacity 0.2s'
+    marginBottom: '0.6rem',
+    transition: 'color 0.2s',
+    fontSize: '0.95rem',
   },
   socialLinks: {
     display: 'flex',
-    gap: '1rem',
+    gap: '0.75rem',
     marginTop: '1rem'
   },
   socialIcon: {
-    color: 'white',
+    color: 'rgba(255,255,255,0.6)',
     textDecoration: 'none',
-    fontSize: '1.5rem',
-    transition: 'opacity 0.2s'
+    fontSize: '1.25rem',
+    transition: 'color 0.2s'
   },
   footerBottom: {
-    borderTop: '1px solid #555',
-    paddingTop: '2rem',
+    borderTop: '1px solid rgba(255,255,255,0.1)',
+    paddingTop: '1.5rem',
     textAlign: 'center',
-    color: '#ccc'
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: '0.85rem',
   },
   waitlist: {
     backgroundColor: colors.primary,
     color: 'white',
-    padding: '4rem 2rem',
-    borderRadius: '16px',
+    padding: '3rem 2rem',
+    borderRadius: '20px',
     textAlign: 'center',
-    margin: '4rem 0'
+    margin: '3rem 0'
   },
   waitlistForm: {
     display: 'flex',
-    gap: '1rem',
+    gap: '0.75rem',
     justifyContent: 'center',
-    marginTop: '2rem',
+    marginTop: '1.5rem',
     flexWrap: 'wrap'
   },
   emailInput: {
-    padding: '14px 20px',
-    fontSize: '1rem',
-    borderRadius: '8px',
+    padding: '12px 18px',
+    fontSize: '0.95rem',
+    borderRadius: '10px',
     border: 'none',
-    minWidth: '300px',
-    maxWidth: '400px',
-    fontFamily: 'inherit'
+    minWidth: '280px',
+    maxWidth: '360px',
+    fontFamily: fonts.body,
   },
   submitButton: {
     backgroundColor: colors.footer,
     color: 'white',
     border: 'none',
-    padding: '14px 32px',
-    fontSize: '1rem',
+    padding: '12px 28px',
+    fontSize: '0.95rem',
     fontWeight: '600',
-    borderRadius: '8px',
+    fontFamily: fonts.body,
+    borderRadius: '10px',
     cursor: 'pointer',
     transition: 'transform 0.2s, box-shadow 0.2s',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
   },
   submitButtonHover: {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)'
+    transform: 'translateY(-1px)',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)'
   },
   successMessage: {
     backgroundColor: colors.success,
     color: 'white',
-    padding: '1rem 2rem',
-    borderRadius: '8px',
+    padding: '0.85rem 1.5rem',
+    borderRadius: '10px',
     marginTop: '1rem',
     display: 'inline-block',
-    fontWeight: '500'
+    fontWeight: '500',
+    fontSize: '0.95rem',
   },
   errorMessage: {
     backgroundColor: colors.error,
     color: 'white',
-    padding: '1rem 2rem',
-    borderRadius: '8px',
+    padding: '0.85rem 1.5rem',
+    borderRadius: '10px',
     marginTop: '1rem',
     display: 'inline-block',
-    fontWeight: '500'
+    fontWeight: '500',
+    fontSize: '0.95rem',
   },
-  // Form input style
   input: {
-    padding: '14px 16px',
-    fontSize: '1rem',
-    borderRadius: '8px',
-    border: `1px solid ${colors.borderDark}`,
-    fontFamily: 'inherit',
+    padding: '12px 16px',
+    fontSize: '0.95rem',
+    borderRadius: '10px',
+    border: `1px solid ${colors.border}`,
+    fontFamily: fonts.body,
     width: '100%',
     boxSizing: 'border-box',
-    transition: 'border-color 0.2s'
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+    backgroundColor: colors.white,
+    outline: 'none',
   }
 };
 
